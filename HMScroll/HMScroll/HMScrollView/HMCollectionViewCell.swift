@@ -24,6 +24,8 @@ class HMCollectionViewCell: UICollectionViewCell {
     var model:HMScrollModel?{
         didSet{
             label.text=model?.text
+            let URL = NSURL(string: (model?.imageURL)!)!
+            imageView.setImageWithURL(URL)
         }
     }
     

@@ -134,7 +134,10 @@ class HMScroll: UIView {
     
     func scrollAuto()
     {
-        
+        let currentOff:CGFloat = collectionView!.contentOffset.x;
+        let targetOff:CGFloat  = currentOff + itemSize!.width + CGFloat(itemSpacing!);
+        collectionView?.setContentOffset(CGPoint(x: targetOff, y: (collectionView?.contentOffset.y)!), animated: true)
+
     }
     
     private func stopTime()
