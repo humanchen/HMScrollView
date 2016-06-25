@@ -38,6 +38,9 @@ class HMScroll: UIView {
             {
                 return
             }
+            pageControl.numberOfPages=(dataarr?.count)!
+            pageControl.currentPage=0
+            
             
             var newdata=[HMScrollModel]()
             newdata.append((dataarr?.last)!)
@@ -76,6 +79,13 @@ class HMScroll: UIView {
         
     }
     
+    //页面标志器
+    private lazy var pageControl:UIPageControl = {
+        let pageCotrol:UIPageControl = UIPageControl(frame: CGRect(x: self.frame.size.width-100, y: self.frame.size.height-20, width: 100, height: 20))
+        pageCotrol.pageIndicatorTintColor=UIColor.greenColor()
+        return pageCotrol
+    }()
+    
     
     private lazy var collectionViewLayout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
     
@@ -105,6 +115,8 @@ class HMScroll: UIView {
         self.itemSize=self.frame.size
         self.itemSpacing=0
         self.addSubview(collectionView!)
+        
+        self.addSubview(pageControl)
     }
     
     
@@ -120,11 +132,31 @@ class HMScroll: UIView {
         {
             scrollView.contentOffset = CGPoint(x: (offX - CGFloat((dataarr?.count)!-2) * CGFloat(pageW)  ), y: 0)
         }
+        
+        if( itemSize?.width < self.frame.size.width )
+        {
+        let startOff:CGFloat = pageW - (self.frame.size.width - (itemSize?.width)!)/2
+       pageControl.currentPage = Int((scrollView.contentOffset.x - startOff) / pageW)
+        }
+        else
+        {
+            let startOff:CGFloat = pageW
+            var page = Int((scrollView.contentOffset.x - startOff) / pageW)
+            if (page>((dataarr?.count)!-3))
+            {
+                page = 0
+            }
+             pageControl.currentPage=page
+            print(Int((scrollView.contentOffset.x - startOff) / pageW))
+
+            
+        }
+        
     }
     private func startTime()
     {
         stopTime()
-        if((autoScroll == nil))
+        if((autoScroll == false))
         {return}
         
         timer = NSTimer(timeInterval: timeInterval, target: self, selector: "scrollAuto", userInfo: nil, repeats: true)

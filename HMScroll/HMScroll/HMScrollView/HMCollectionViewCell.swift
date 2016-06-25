@@ -45,8 +45,8 @@ class HMCollectionViewCell: UICollectionViewCell {
         label.frame=CGRect(x: 0, y: self.frame.height-20, width: self.frame.width, height: 20)
         label.numberOfLines=0
         label.textAlignment=NSTextAlignment.Center
-        label.textColor=UIColor.whiteColor()
-        label.font = UIFont.systemFontOfSize(16)
+        label.textColor=UIColor.blackColor()
+        label.font = UIFont.systemFontOfSize(18)
         
         contentView .addSubview(label)
         

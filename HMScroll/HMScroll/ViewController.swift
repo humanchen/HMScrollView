@@ -42,8 +42,6 @@ class ViewController: UIViewController {
     
     private lazy var dataarr:[HMScrollModel] = {
         let arr = [
-//            "http://a4.mzstatic.com/us/r30/Features49/v4/77/73/3b/77733b19-2fb6-be1a-6a5e-8e01c30d2c94/flowcase_1060_520_2x.jpeg",
-//            "http://a3.mzstatic.com/us/r30/Features49/v4/93/31/d4/9331d426-4596-51f4-8acd-5b0aba8c1692/flowcase_1060_520_2x.jpeg"
             "http://images.apple.com/cn/itunespromos/itunes-this-week/images/2016/6/0cc2a1ba-c7e5-6860-fa1a-619258727fcd/flowcase_200_98_1x.jpg",
             "http://images.apple.com/cn/itunespromos/itunes-this-week/images/2016/6/2af3e147-6a8a-f934-8da0-fc5b1b8b9643/flowcase_200_98_1x.jpg",
             "http://images.apple.com/cn/itunespromos/itunes-this-week/images/2016/6/bceec353-bb8b-d0e8-0134-b44882dfaafb/flowcase_680_260_1x.jpg",
