@@ -8,8 +8,16 @@
 
 import UIKit
 let  HMCollectionCellID:String="HMCollectionViewCell"
+
+enum HMDirection {
+    case Left
+    case Right
+    
+}
+
 class HMScroll: UIView {
 
+ 
     
     override init(frame: CGRect) {
        super.init(frame: frame)
@@ -27,6 +35,14 @@ class HMScroll: UIView {
         didSet{
             setupUI()
         }
+    }
+    //滚动方向
+    var direction:HMDirection = HMDirection.Right{
+    
+        didSet{
+            startTime()
+        }
+        
     }
     //时间
     var timer:NSTimer?
@@ -82,12 +98,13 @@ class HMScroll: UIView {
     //页面标志器
     private lazy var pageControl:UIPageControl = {
         let pageCotrol:UIPageControl = UIPageControl(frame: CGRect(x: self.frame.size.width-100, y: self.frame.size.height-20, width: 100, height: 20))
-        pageCotrol.pageIndicatorTintColor=UIColor.greenColor()
+        pageCotrol.pageIndicatorTintColor=UIColor.whiteColor()
+        pageCotrol.currentPageIndicatorTintColor=UIColor.blackColor()
         return pageCotrol
     }()
     
     
-    private lazy var collectionViewLayout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+    private lazy var collectionViewLayout:HMlayout = HMlayout()
     
     private  var collectionView:UICollectionView?
 
@@ -133,7 +150,7 @@ class HMScroll: UIView {
             scrollView.contentOffset = CGPoint(x: (offX - CGFloat((dataarr?.count)!-2) * CGFloat(pageW)  ), y: 0)
         }
         
-        if( itemSize?.width < self.frame.size.width )
+        if( itemSize?.width <= self.frame.size.width )
         {
         let startOff:CGFloat = pageW - (self.frame.size.width - (itemSize?.width)!)/2
        pageControl.currentPage = Int((scrollView.contentOffset.x - startOff) / pageW)
@@ -147,12 +164,23 @@ class HMScroll: UIView {
                 page = 0
             }
              pageControl.currentPage=page
-            print(Int((scrollView.contentOffset.x - startOff) / pageW))
+//            print(Int((scrollView.contentOffset.x - startOff) / pageW))
 
             
         }
         
     }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        stopTime()
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        startTime()
+    }
+    
+    
+    
     private func startTime()
     {
         stopTime()
@@ -167,8 +195,16 @@ class HMScroll: UIView {
     func scrollAuto()
     {
         let currentOff:CGFloat = collectionView!.contentOffset.x;
-        let targetOff:CGFloat  = currentOff + itemSize!.width + CGFloat(itemSpacing!);
-        collectionView?.setContentOffset(CGPoint(x: targetOff, y: (collectionView?.contentOffset.y)!), animated: true)
+        var targetOff:CGFloat?
+        if( direction == HMDirection.Right)
+        {
+        targetOff  = currentOff + itemSize!.width + CGFloat(itemSpacing!)
+        }
+        else
+        {
+            targetOff  = currentOff - itemSize!.width - CGFloat(itemSpacing!)
+        }
+        collectionView?.setContentOffset(CGPoint(x: targetOff!, y: (collectionView?.contentOffset.y)!), animated: true)
 
     }
     
@@ -206,4 +242,55 @@ extension HMScroll:UICollectionViewDataSource,UICollectionViewDelegate
             didSelected(model: dataarr![indexPath.row])
     }
 
+}
+
+class HMlayout: UICollectionViewFlowLayout {
+    
+    override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        let pcOffContentOffsetX:CGFloat = proposedContentOffset.x + CGRectGetWidth((self.collectionView?.bounds)!) * 0.5
+        
+        let layoutElements:[UICollectionViewLayoutAttributes] = layoutAttributesForElementsInRect((collectionView?.bounds)!)!
+        
+        var layoutAtrs : UICollectionViewLayoutAttributes? = layoutElements.first
+        
+        for layoutAttributesForElement in layoutElements
+        {
+            if(layoutAttributesForElement.representedElementCategory != UICollectionElementCategory.Cell )
+            {
+                continue
+            }
+            
+            let dis1 = layoutAttributesForElement.center.x - pcOffContentOffsetX
+            let dis2 = layoutAtrs!.center.x - pcOffContentOffsetX
+            
+            if( fabs(dis1) == fabs(dis2) )
+            {
+                layoutAtrs = layoutAttributesForElement
+                print("相等")
+            }
+            
+            if ( fabs(dis1) < fabs(dis2) )
+            {
+                layoutAtrs = layoutAttributesForElement
+            }
+            
+            
+        }
+        
+        
+        if( layoutAtrs != nil)
+        {
+            return CGPointMake(layoutAtrs!.center.x - CGRectGetWidth((collectionView?.bounds)!) * 0.5
+                , proposedContentOffset.y)
+            
+        }
+        
+        
+        
+        
+        
+        return super.targetContentOffsetForProposedContentOffset(proposedContentOffset, withScrollingVelocity: velocity)
+        
+        
+    }
 }
