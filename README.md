@@ -9,4 +9,4 @@
 
 ## 全部用swift编写，不是混编，目前还在开发完善当中，觉得不错的帮忙点一下star，谢谢！！
 
-(gif.gif)
+![iPhone 6](gif.gif "iPhone")
