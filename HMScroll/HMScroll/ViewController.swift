@@ -13,7 +13,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-       let ScrollView:HMScroll = HMScroll(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: itemSize.height))
+        
+        view.backgroundColor=UIColor.groupTableViewBackgroundColor()
+       let ScrollView:HMScroll = HMScroll(frame: CGRect(x: 0, y: 40, width: UIScreen.mainScreen().bounds.width, height: itemSize.height))
         ScrollView.autoScroll=true
         ScrollView.timeInterval=3
         ScrollView.itemSize=itemSize
