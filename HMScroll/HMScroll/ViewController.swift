@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         ScrollView.itemSize=itemSize
         ScrollView.itemSpacing=itemSpacing
         ScrollView.dataarr=dataarr
-        ScrollView.direction=HMDirection.Left
+        ScrollView.direction=HMDirection.Right
         ScrollView.didSelected = {
             (model:HMScrollModel)->() in
             
